@@ -143,6 +143,7 @@ NSString *kAPIPrefix = @"webservices";
     baseURL = path;
   }
 
+  baseURL = @"http://localhost:8080/mhc/";
   return baseURL;
 }
 
@@ -551,14 +552,19 @@ NSString *kAPIPrefix = @"webservices";
 
 - (NSURL *) URLForRelativeorAbsoluteURLString: (NSString*) URLString
 {
+    if ([URLString hasPrefix:@"/"]) {
+        URLString = [URLString substringFromIndex:1];
+    }
+
     NSURL *url = [NSURL URLWithString:URLString];
     if ([url.scheme.lowercaseString hasPrefix:@"http"]) {
         return url;
     }
     else
     {
-        NSURL * tempURL =[NSURL URLWithString:URLString relativeToURL:[NSURL URLWithString:self.baseURL]];
-        return [NSURL URLWithString:[tempURL absoluteString]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.baseURL, URLString]];
+//        NSURL * tempURL =[NSURL URLWithString:URLString relativeToURL:[NSURL URLWithString:self.baseURL]];
+//        return [NSURL URLWithString:[tempURL absoluteString]];
     }
 }
 
