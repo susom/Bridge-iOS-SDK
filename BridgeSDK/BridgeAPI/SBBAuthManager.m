@@ -267,7 +267,21 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
 
 - (NSURLSessionDataTask *)signUpWithEmail:(NSString *)email username:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion
 {
-    return [_networkManager post:@"/api/v1/auth/signUp" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password, @"type":@"SignUp"} completion:completion];
+    return [_networkManager post:@"/api/v1/auth/signUp" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password, @"type":@"SignUp"} completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        NSString *newUsername = responseObject[@"username"];
+        if (newUsername.length) {
+            dispatchSyncToKeychainQueue(^{
+                UICKeyChainStore *store = [self.class sdkKeychainStore];
+                [store setString:newUsername forKey:self.usernameKey];
+
+                [store synchronize];
+            });
+        }
+
+        if (completion) {
+            completion(task, responseObject, error);
+        }
+    }];
 }
 
 - (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion
