@@ -150,11 +150,17 @@ extern NSString *gSBBAppStudy;
  either because it was not used to sign up for an account, or because it has already been verified.
  
  @param email      The email address for which to re-send the verification link.
+ @username          The server generated deviceRpid
+ 
+ @password          The app generated password
+ 
+ 
  @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
  
  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
-- (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion;
+- (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email username:(NSString *)username password:(NSString *) password
+                                       completion:(SBBNetworkManagerCompletionBlock)completion;
 
 /*!
  * Sign in to an existing account with a userName and password.
@@ -235,7 +241,7 @@ extern NSString *gSBBAppStudy;
 /*!
  * Return an SBBAuthManager component configured for the specified environment, appURLPrefix, and baseURLPath
  * with a default network manager.
- * 
+ *
  * Use this method directly only if you need to redirect your Bridge API accesses to a test server.
  *
  * @param environment The SBBEnvironment to use (prod, staging, dev).

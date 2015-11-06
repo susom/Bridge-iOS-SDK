@@ -273,20 +273,20 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
             dispatchSyncToKeychainQueue(^{
                 UICKeyChainStore *store = [self.class sdkKeychainStore];
                 [store setString:newUsername forKey:self.usernameKey];
-
+                
                 [store synchronize];
             });
         }
-
+        
         if (completion) {
             completion(task, responseObject, error);
         }
     }];
 }
 
-- (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion
+- (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email username:(NSString *)username password:(NSString *) password completion:(SBBNetworkManagerCompletionBlock)completion
 {
-    return [_networkManager post:@"/api/v1/auth/resendEmailVerification" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email} completion:completion];
+    return [_networkManager post:@"/api/v1/auth/resendEmailVerification" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password} completion:completion];
 }
 
 - (NSURLSessionDataTask *)signInWithUsername:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion
