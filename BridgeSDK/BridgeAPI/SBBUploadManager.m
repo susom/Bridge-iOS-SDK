@@ -173,8 +173,10 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
 
 - (SBBUploadManagerCompletionBlock)completionBlockForFile:(NSString *)file
 {
-    SBBUploadCompletionWrapper *wrapper = [_uploadCompletionHandlers objectForKey:file];
-    return wrapper.completion;
+    @synchronized(self) {
+        SBBUploadCompletionWrapper *wrapper = [_uploadCompletionHandlers objectForKey:file];
+        return wrapper.completion;
+    }
 }
 
 - (void)setCompletionBlock:(SBBUploadManagerCompletionBlock)completion forFile:(NSString *)file
@@ -184,12 +186,16 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
         return;
     }
     SBBUploadCompletionWrapper *wrapper = [[SBBUploadCompletionWrapper alloc] initWithBlock:completion];
-    [_uploadCompletionHandlers setObject:wrapper forKey:file];
+    @synchronized(self) {
+        [_uploadCompletionHandlers setObject:wrapper forKey:file];
+    }
 }
 
 - (void)removeCompletionBlockForFile:(NSString *)file
 {
-    [_uploadCompletionHandlers removeObjectForKey:file];
+    @synchronized(self) {
+        [_uploadCompletionHandlers removeObjectForKey:file];
+    }
 }
 
 - (void)setUploadRequestJSON:(id)json forFile:(NSString *)fileURLString
@@ -331,7 +337,9 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
     }
     
     // clear everything out
-    [_uploadCompletionHandlers removeAllObjects];
+    @synchronized(self) {
+        [_uploadCompletionHandlers removeAllObjects];
+    }
     [defaults removeObjectForKey:kUploadRequestsKey];
     [defaults removeObjectForKey:kUploadSessionsKey];
     [defaults removeObjectForKey:kUploadFilesKey];
