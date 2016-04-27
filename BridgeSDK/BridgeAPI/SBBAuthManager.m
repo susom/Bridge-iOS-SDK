@@ -327,7 +327,7 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
 {
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     [self addAuthHeaderToHeaders:headers];
-    return [_networkManager get:@"/api/v1/auth/signOut" headers:headers parameters:nil completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+    return [_networkManager get:@"/api/v1/auth/withdraw" headers:headers parameters:nil completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
         // Remove the session token (and credentials?) from the keychain
         // ??? Do we want to not do this in case of error?
         if (_authDelegate) {
