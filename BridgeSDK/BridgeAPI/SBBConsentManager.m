@@ -103,6 +103,47 @@ NSString* const kSBBConsentShareScopeStrings[] = {
   }];
 }
 
+- (NSURLSessionDataTask *)mHealthConsentSignature:(NSString *)name
+                                 birthdate:(NSDate *)date
+                            signatureImage:(UIImage*)signatureImage
+                              dataSharing:(SBBConsentShareScope)scope
+                                completion:(SBBConsentManagerCompletionBlock)completion
+{
+  NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+  [self.authManager addAuthHeaderToHeaders:headers];
+  static NSDateFormatter *birthdateFormatter = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    birthdateFormatter = [[NSDateFormatter alloc] init];
+    [birthdateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [birthdateFormatter setLocale:enUSPOSIXLocale];
+  });
+  
+  NSString *birthdate = [birthdateFormatter stringFromDate:date];
+  NSMutableDictionary *ResearchConsent = [NSMutableDictionary dictionary];
+  [ResearchConsent setObject:name forKey:kSBBKeyName];
+  [ResearchConsent setObject:birthdate forKey:kSBBKeyBirthdate];
+
+  // Add signature image, if it's specified
+  if (signatureImage != nil) {
+    NSData* imageData = UIImagePNGRepresentation(signatureImage);
+    NSString* imageBase64String = [imageData base64EncodedStringWithOptions:kNilOptions];
+    [ResearchConsent setObject:imageBase64String forKey:kSBBKeyImageData];
+    [ResearchConsent setObject:kSBBMimeTypePng forKey:kSBBKeyImageMimeType];
+  }
+    
+  // Add sharing scope
+  [ResearchConsent setObject:kSBBConsentShareScopeStrings[scope] forKey:kSBBKeyConsentShareScope];
+
+  return [self.networkManager post:@"/api/v1/consent" headers:headers parameters:ResearchConsent
+      completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+    if (completion) {
+      completion(responseObject, error);
+    }
+  }];
+}
+
 - (NSURLSessionDataTask*)retrieveConsentSignatureWithCompletion:(SBBConsentManagerRetrieveCompletionBlock)completion
 {
   NSMutableDictionary *headers = [NSMutableDictionary dictionary];
@@ -162,6 +203,18 @@ NSString* const kSBBConsentShareScopeStrings[] = {
     [self.authManager addAuthHeaderToHeaders:headers];
     NSDictionary *parameters = @{kSBBKeyConsentShareScope: kSBBConsentShareScopeStrings[scope]};
     return [self.networkManager post:@"/api/v2/consent/dataSharing" headers:headers parameters:parameters completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        if (completion) {
+            completion(responseObject, error);
+        }
+    }];
+}
+
+- (NSURLSessionDataTask *)mHealthDataSharing:(SBBConsentShareScope)scope completion:(SBBConsentManagerCompletionBlock)completion
+{
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    [self.authManager addAuthHeaderToHeaders:headers];
+    NSDictionary *parameters = @{kSBBKeyConsentShareScope: kSBBConsentShareScopeStrings[scope]};
+    return [self.networkManager post:@"/api/v1/consent/dataSharing" headers:headers parameters:parameters completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
         if (completion) {
             completion(responseObject, error);
         }

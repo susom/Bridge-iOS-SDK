@@ -54,6 +54,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5A5D3AD61D51D8C9004811E3 /* SBBMhealthNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5D3AD41D51D8C9004811E3 /* SBBMhealthNetworkManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5A5D3AD71D51D8C9004811E3 /* SBBMhealthNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A5D3AD51D51D8C9004811E3 /* SBBMhealthNetworkManager.m */; };
 		601E8A101B191DAE00BB02FB /* MockURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 601E8A0F1B191DAE00BB02FB /* MockURLSession.m */; };
 		606FDE211A2F9DC800898466 /* _SBBIdentifierHolder.h in Headers */ = {isa = PBXBuildFile; fileRef = 606FDE1F1A2F9DC800898466 /* _SBBIdentifierHolder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		606FDE221A2F9DC800898466 /* _SBBIdentifierHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 606FDE201A2F9DC800898466 /* _SBBIdentifierHolder.m */; };
@@ -245,6 +247,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A5D3AD41D51D8C9004811E3 /* SBBMhealthNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBBMhealthNetworkManager.h; sourceTree = "<group>"; };
+		5A5D3AD51D51D8C9004811E3 /* SBBMhealthNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBBMhealthNetworkManager.m; sourceTree = "<group>"; };
 		601E8A0E1B191DAE00BB02FB /* MockURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockURLSession.h; sourceTree = "<group>"; };
 		601E8A0F1B191DAE00BB02FB /* MockURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockURLSession.m; sourceTree = "<group>"; };
 		606FDE1F1A2F9DC800898466 /* _SBBIdentifierHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SBBIdentifierHolder.h; sourceTree = "<group>"; };
@@ -650,6 +654,8 @@
 				80855F6B19BE27ED006601C7 /* SBBNetworkManager.h */,
 				60B635421B14F5C800C4DA63 /* SBBNetworkManagerInternal.h */,
 				80855F6C19BE27ED006601C7 /* SBBNetworkManager.m */,
+				5A5D3AD41D51D8C9004811E3 /* SBBMhealthNetworkManager.h */,
+				5A5D3AD51D51D8C9004811E3 /* SBBMhealthNetworkManager.m */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -885,6 +891,7 @@
 				80855F7219BE27ED006601C7 /* SBBNetworkManager.h in Headers */,
 				80E819771A83E8EB00513919 /* SBBSurveyInfoScreen.h in Headers */,
 				80F7C32219E5AA8400574800 /* ModelObject.h in Headers */,
+				5A5D3AD61D51D8C9004811E3 /* SBBMhealthNetworkManager.h in Headers */,
 				80E8196A1A83E89E00513919 /* _SBBSurveyInfoScreen.h in Headers */,
 				8026BD2219C892E40077F3EB /* SBBComponentManager.h in Headers */,
 				800E792219ED73FD00EEE612 /* _SBBBooleanConstraints.h in Headers */,
@@ -1086,6 +1093,7 @@
 				80E60DA519FAD5860053D166 /* SBBSchedule.m in Sources */,
 				80F7C34819E5DC0D00574800 /* _SBBSurveyQuestion.m in Sources */,
 				800E794019ED744000EEE612 /* _SBBIntegerConstraints.m in Sources */,
+				5A5D3AD71D51D8C9004811E3 /* SBBMhealthNetworkManager.m in Sources */,
 				800E795619ED74A600EEE612 /* SBBDateConstraints.m in Sources */,
 				8017AF7119DA0359001AF9BA /* NSError+SBBAdditions.m in Sources */,
 				8026BD1E19C883FC0077F3EB /* BridgeSDK.m in Sources */,

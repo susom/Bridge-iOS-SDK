@@ -419,11 +419,11 @@ NSString *kAPIPrefix = @"webservices";
         
         if (error)
         {
-            [self handleError:error task:task retryObject:localRetryObject];
+            [self handleError:error task:task response:responseObject retryObject:localRetryObject];
         }
         else if (httpError)
         {
-            [self handleHTTPError:httpError task:task retryObject:localRetryObject];
+            [self handleHTTPError:httpError task:task response:responseObject retryObject:localRetryObject];
         }
         else
         {
@@ -649,7 +649,7 @@ NSString *kAPIPrefix = @"webservices";
 /*********************************************************************************/
 #pragma mark - Error Handler
 /*********************************************************************************/
-- (void)handleError:(NSError*)error task:(NSURLSessionDataTask*) task retryObject: (APCNetworkRetryObject*) retryObject
+- (void)handleError:(NSError*)error task:(NSURLSessionDataTask*)task response:(id)responseObject retryObject: (APCNetworkRetryObject*)retryObject
 {
     NSInteger errorCode = error.code;
     NSError * apcError = [NSError generateSBBErrorForNSURLError:error isInternetConnected:self.isInternetConnected isServerReachable:self.isServerReachable];
@@ -657,7 +657,7 @@ NSString *kAPIPrefix = @"webservices";
     if (!self.isInternetConnected || !self.isServerReachable) {
         if (retryObject.completionBlock)
         {
-            retryObject.completionBlock(task, nil, apcError);
+            retryObject.completionBlock(task, responseObject, apcError);
         }
         retryObject.retryBlock = nil;
     }
@@ -676,7 +676,7 @@ NSString *kAPIPrefix = @"webservices";
         {
             if (retryObject.completionBlock)
             {
-                retryObject.completionBlock(task, nil, apcError);
+                retryObject.completionBlock(task, responseObject, apcError);
             }
             retryObject.retryBlock = nil;
         }
@@ -685,18 +685,18 @@ NSString *kAPIPrefix = @"webservices";
     {
         if (retryObject.completionBlock)
         {
-            retryObject.completionBlock(task, nil, apcError);
+            retryObject.completionBlock(task, responseObject, apcError);
         }
         retryObject.retryBlock = nil;
     }
 }
 
-- (void)handleHTTPError:(NSError *)error task:(NSURLSessionDataTask *)task retryObject:(APCNetworkRetryObject *)retryObject
+- (void)handleHTTPError:(NSError *)error task:(NSURLSessionDataTask *)task response:(id)responseObject retryObject:(APCNetworkRetryObject *)retryObject
 {
     //TODO: Add retry for Server maintenance
     if (retryObject.completionBlock)
     {
-        retryObject.completionBlock(task, nil, error);
+        retryObject.completionBlock(task, responseObject, error);
     }
     retryObject.retryBlock = nil;
 }

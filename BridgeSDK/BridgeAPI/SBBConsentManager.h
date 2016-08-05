@@ -91,6 +91,23 @@ typedef void (^SBBConsentManagerRetrieveCompletionBlock)(NSString* name, NSStrin
                                 completion:(SBBConsentManagerCompletionBlock)completion;
 
 /*!
+ *  Submit the user's "signature" and birthdate to indicate MHealth consent to participate in this research project.
+ *
+ *  @param name       The user's name.
+ *  @param date       The user's birthday in the format "YYYY-MM-DD".
+ *  @param signatureImage  Image file of the user's signature. Should be less than 10kb. Optional, can be nil.
+ *  @param scope      The scope of data sharing to which the user has consented.
+ *  @param completion An SBBConsentManagerCompletionBlock to be called upon completion.
+ *
+ *  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)mHealthConsentSignature:(NSString *)name
+                                 birthdate:(NSDate *)date
+                            signatureImage:(UIImage*)signatureImage
+                              dataSharing:(SBBConsentShareScope)scope
+                                       completion:(SBBConsentManagerCompletionBlock)completion;
+
+/*!
  *  Retrieve the user's consent signature as previously submitted. If the user has not submitted a consent signature,
  *  this method throws an Entity Not Found error.
  *
@@ -133,6 +150,18 @@ typedef void (^SBBConsentManagerRetrieveCompletionBlock)(NSString* name, NSStrin
  *  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
 - (NSURLSessionDataTask *)dataSharing:(SBBConsentShareScope)scope completion:(SBBConsentManagerCompletionBlock)completion;
+
+/**
+ *  Change the scope of data sharing for this user, specific to MHealth server.
+ *  This should only be done in response to an explicit choice on the part of the user to change the sharing scope.
+ *
+ *  @param scope The scope of data sharing to set for this user.
+ *
+ *  @param completion An SBBConsentManagerCompletionBlock to be called upon completion.
+ *
+ *  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)mHealthDataSharing:(SBBConsentShareScope)scope completion:(SBBConsentManagerCompletionBlock)completion;
 
 @end
 

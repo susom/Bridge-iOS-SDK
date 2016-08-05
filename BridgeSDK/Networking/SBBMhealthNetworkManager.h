@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2015, Sage Bionetworks. All rights reserved.
+ Copyright (c) 2016, Sage Bionetworks. All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,34 +28,11 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Foundation/Foundation.h>
 #import "SBBNetworkManager.h"
 
-extern NSString *kAPIPrefix;
+extern NSString * kStanfordBackgroundSessionIdentifier;
 
-#pragma mark - APC Retry Object - Keeps track of retry count
-
-@interface APCNetworkRetryObject : NSObject
-
-@property (nonatomic) NSInteger retryCount;
-@property (nonatomic, copy) SBBNetworkManagerCompletionBlock completionBlock;
-@property (nonatomic, copy) void (^retryBlock)(void);
-
-@end
-
-#pragma mark - SBBNetworkManager Bridge category
-
-@interface SBBNetworkManager (Bridge)
-
-@property (nonatomic, strong) NSURLSession * mainSession; //For data tasks
-@property (nonatomic, strong) NSURLSession * backgroundSession; //For upload/download tasks
-
-+ (NSString *)baseURLForEnvironment:(SBBEnvironment)environment appURLPrefix:(NSString *)prefix baseURLPath:(NSString *)baseURLPath;
-
-- (instancetype)initWithBaseURL:(NSString*)baseURL bridgeStudy:(NSString*)bridgeStudy;
-
-- (void)handleHTTPError:(NSError *)error task:(NSURLSessionDataTask *)task response:(id)responseObject retryObject:(APCNetworkRetryObject *)retryObject;
-- (NSDictionary *)headersPreparedForRetry:(NSDictionary *)headers;
-
-- (NSURL *) URLForRelativeorAbsoluteURLString: (NSString*) URLString;
+@interface SBBMhealthNetworkManager : SBBNetworkManager
 
 @end

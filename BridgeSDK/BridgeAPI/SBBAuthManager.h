@@ -157,6 +157,22 @@ extern NSString *gSBBAppStudy;
 - (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion;
 
 /*!
+ Request mhealth to re-send the email verification link to the specified email address.
+ 
+ A 404 Not Found HTTP status indicates there is no pending verification for that email address,
+ either because it was not used to sign up for an account, or because it has already been verified.
+ 
+ @param email      The email address for which to re-send the verification link.
+ @username          The server generated deviceRpid
+ @password          The app generated password
+ @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)resendMhealthEmailVerification:(NSString *)email username:(NSString *)username password:(NSString *) password
+                                       completion:(SBBNetworkManagerCompletionBlock)completion;
+
+/*!
  * Sign in to an existing account with a userName and password.
  *
  * @param username The username of the account being signed into.
@@ -173,6 +189,14 @@ extern NSString *gSBBAppStudy;
  * @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
 - (NSURLSessionDataTask *)signOutWithCompletion:(SBBNetworkManagerCompletionBlock)completion;
+
+/*!
+ * Sign out of the user's Mhealth account.
+ *
+ * @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
+ * @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)mhealthWithdrawWithCompletion:(SBBNetworkManagerCompletionBlock)completion;
 
 /*!
  * Call this at app launch to ensure the user is logged in to their account (if any).

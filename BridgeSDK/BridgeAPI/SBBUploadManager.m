@@ -395,8 +395,12 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
         };
 #endif
         NSURL *fileUrl = [NSURL fileURLWithPath:downloadTask.taskDescription];
-        [self.networkManager uploadFile:fileUrl httpHeaders:uploadHeaders toUrl:uploadSession.url taskDescription:downloadTask.taskDescription
+        
+        NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:uploadHeaders];
+        [self.authManager addAuthHeaderToHeaders:headers];
+        [self.networkManager uploadFile:fileUrl httpHeaders:headers toUrl:uploadSession.url taskDescription:downloadTask.taskDescription
                              completion:uploadFileCompletion];
+        
     } else {
         NSError *error = [NSError generateSBBObjectNotExpectedClassErrorForObject:uploadSession expectedClass:[SBBUploadSession class]];
         [self completeUploadOfFile:downloadTask.taskDescription withError:error];

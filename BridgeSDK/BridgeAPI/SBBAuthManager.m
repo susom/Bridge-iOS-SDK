@@ -267,12 +267,31 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
 
 - (NSURLSessionDataTask *)signUpWithEmail:(NSString *)email username:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion
 {
-    return [_networkManager post:@"/api/v1/auth/signUp" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password, @"type":@"SignUp"} completion:completion];
+    return [_networkManager post:@"/api/v1/auth/signUp" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password, @"type":@"SignUp"} completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        NSString *newUsername = responseObject[@"username"];
+        if (newUsername.length) {
+            dispatchSyncToKeychainQueue(^{
+                UICKeyChainStore *store = [self.class sdkKeychainStore];
+                [store setString:newUsername forKey:self.usernameKey];
+                
+                [store synchronize];
+            });
+        }
+        
+        if (completion) {
+            completion(task, responseObject, error);
+        }
+    }];
 }
 
 - (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion
 {
     return [_networkManager post:@"/api/v1/auth/resendEmailVerification" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email} completion:completion];
+}
+
+- (NSURLSessionDataTask *)resendMhealthEmailVerification:(NSString *)email username:(NSString *)username password:(NSString *) password completion:(SBBNetworkManagerCompletionBlock)completion
+{
+    return [_networkManager post:@"/api/v1/auth/resendEmailVerification" headers:nil parameters:@{@"study":gSBBAppStudy, @"email":email, @"username":username, @"password":password} completion:completion];
 }
 
 - (NSURLSessionDataTask *)signInWithUsername:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion
@@ -299,6 +318,33 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
                     [store synchronize];
                 });
             }
+        }
+        
+        if (completion) {
+            completion(task, responseObject, error);
+        }
+    }];
+}
+
+- (NSURLSessionDataTask *)mhealthWithdrawWithCompletion:(SBBNetworkManagerCompletionBlock)completion
+{
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    [self addAuthHeaderToHeaders:headers];
+    return [_networkManager get:@"/api/v1/auth/withdraw" headers:headers parameters:nil completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        // Remove the session token (and credentials?) from the keychain
+        // ??? Do we want to not do this in case of error?
+        if (!_authDelegate) {
+            dispatchSyncToKeychainQueue(^{
+                UICKeyChainStore *store = [self.class sdkKeychainStore];
+                [store removeItemForKey:self.sessionTokenKey];
+                [store removeItemForKey:self.usernameKey];
+                [store removeItemForKey:self.passwordKey];
+                [store synchronize];
+            });
+            // clear the in-memory copy of the session token, too
+            dispatchSyncToAuthQueue(^{
+                self.sessionToken = nil;
+            });
         }
         
         if (completion) {
