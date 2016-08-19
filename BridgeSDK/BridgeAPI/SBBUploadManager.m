@@ -135,7 +135,22 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
         [defaults synchronize];
     }
     
+    [self addSkipBackupAttributeToItemAtURL:tempFileURL];
+    
     return tempFileURL;
+}
+
+- (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL {
+    
+    NSError *error = nil;
+    
+    [URL setResourceValue: [NSNumber numberWithBool:YES] forKey: NSURLIsExcludedFromBackupKey error: &error];
+    
+    if (error) {
+        NSLog(@"Error adding skip backup to file %@ :\n%@", [URL path], error);
+    }
+    
+    return error == nil;
 }
 
 - (NSString *)fileForTempFile:(NSString *)tempFilePath
