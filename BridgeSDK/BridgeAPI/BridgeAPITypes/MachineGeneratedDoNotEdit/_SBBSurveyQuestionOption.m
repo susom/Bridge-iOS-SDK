@@ -65,6 +65,8 @@
         self.label = [dictionary objectForKey:@"label"];
 
         self.value = [dictionary objectForKey:@"value"];
+        
+        self.ignoreOthers = [dictionary objectForKey:@"ignoreOthers"];
 
 	}
 
@@ -82,6 +84,8 @@
     [dict setObjectIfNotNil:self.label forKey:@"label"];
 
     [dict setObjectIfNotNil:self.value forKey:@"value"];
+    
+    [dict setObjectIfNotNil:self.ignoreOthers forKey:@"ignoreOthers"];
 
 	return dict;
 }

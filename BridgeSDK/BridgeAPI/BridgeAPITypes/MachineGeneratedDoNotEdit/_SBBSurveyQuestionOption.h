@@ -49,4 +49,6 @@
 
 @property (nonatomic, strong) NSString* value;
 
+@property (nonatomic, strong) NSString* ignoreOthers;
+
 @end
