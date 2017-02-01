@@ -142,7 +142,7 @@ extern NSString *gSBBAppStudy;
  * @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
 - (NSURLSessionDataTask *)signUpWithEmail:(NSString *)email username:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion;
-
+- (NSURLSessionDataTask *)signUpWithParams:(id)params completion:(SBBNetworkManagerCompletionBlock)completion;
 /*!
  Request Bridge to re-send the email verification link to the specified email address.
  
