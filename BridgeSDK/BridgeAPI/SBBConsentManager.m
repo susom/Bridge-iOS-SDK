@@ -144,6 +144,21 @@ NSString* const kSBBConsentShareScopeStrings[] = {
   }];
 }
 
+- (NSURLSessionDataTask *)mHealthConsentSignatureWithParams:(id)params
+                                       completion:(SBBConsentManagerCompletionBlock)completion
+{
+  NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+  [self.authManager addAuthHeaderToHeaders:headers];
+
+  
+  return [self.networkManager post:@"/api/v1/consent" headers:headers parameters:params
+                        completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+                          if (completion) {
+                            completion(responseObject, error);
+                          }
+                        }];
+}
+
 - (NSURLSessionDataTask*)retrieveConsentSignatureWithCompletion:(SBBConsentManagerRetrieveCompletionBlock)completion
 {
   NSMutableDictionary *headers = [NSMutableDictionary dictionary];

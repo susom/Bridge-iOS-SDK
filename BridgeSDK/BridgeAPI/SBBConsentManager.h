@@ -90,6 +90,8 @@ typedef void (^SBBConsentManagerRetrieveCompletionBlock)(NSString* name, NSStrin
                               dataSharing:(SBBConsentShareScope)scope
                                 completion:(SBBConsentManagerCompletionBlock)completion;
 
+- (NSURLSessionDataTask *)mHealthConsentSignatureWithParams:(id)params
+                                                 completion:(SBBConsentManagerCompletionBlock)completion;
 /*!
  *  Submit the user's "signature" and birthdate to indicate MHealth consent to participate in this research project.
  *
