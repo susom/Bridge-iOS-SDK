@@ -131,6 +131,9 @@ static NSString *kUploadSessionsKey = @"SBBUploadSessionsKey";
     if (tempFileURL) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSMutableDictionary *filesForTempFiles = [[defaults dictionaryForKey:kUploadFilesKey] mutableCopy];
+        if (!filesForTempFiles) {
+            filesForTempFiles = [NSMutableDictionary dictionary];
+        }
         [filesForTempFiles setObject:[fileURL path] forKey:[tempFileURL path]];
         [defaults setObject:filesForTempFiles forKey:kUploadFilesKey];
         [defaults synchronize];
