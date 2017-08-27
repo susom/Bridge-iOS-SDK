@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong, readwrite) SBBImage *image;
 
+@property (nonatomic, strong) NSString* ignoreOthers;
+
 - (void) setImage: (SBBImage* _Nullable) image_ settingInverse: (BOOL) setInverse;
 
 @end
