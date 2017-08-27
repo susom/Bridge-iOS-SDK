@@ -49,6 +49,8 @@
 
 @property (nonatomic, strong, readwrite) SBBImage *image;
 
+@property (nonatomic, strong) NSString* ignoreOthers;
+
 - (void) setImage: (SBBImage*) image_ settingInverse: (BOOL) setInverse;
 
 @end

@@ -45,6 +45,8 @@
 
 @property (nonatomic, strong) NSString* href;
 
+@property (nonatomic, strong) NSNumber* version;
+
 @property (nonatomic, strong) NSString* identifier;
 
 @end
