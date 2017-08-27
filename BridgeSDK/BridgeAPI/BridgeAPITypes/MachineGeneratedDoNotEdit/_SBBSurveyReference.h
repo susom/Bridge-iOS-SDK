@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString* href;
 
+@property (nonatomic, strong) NSNumber* version;
+
 @property (nonatomic, strong) NSString* identifier;
 
 @property (nullable, nonatomic, strong) NSNumber* minuteDuration;
