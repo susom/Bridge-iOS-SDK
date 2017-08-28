@@ -36,7 +36,6 @@
 				8063FF8E1E4A9E59001B0C3D /* ShellScript */,
 			);
 			dependencies = (
-				8063030F1E4AA031001B0C3D /* PBXTargetDependency */,
 			);
 			name = libOpenSSL;
 			productName = libOpenSSL;
@@ -463,6 +462,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5A0102321F54C8D500D777E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 659134E91B14262B00B82A96;
+			remoteInfo = "RNCryptor iOS";
+		};
+		5A0102341F54C8D500D777E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1F3717531DDB9C5F009E537B;
+			remoteInfo = "RNCryptor watchOS";
+		};
+		5A0102361F54C8D500D777E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1F37176A1DDB9D1B009E537B;
+			remoteInfo = "RNCryptor tvOS";
+		};
 		606FDDEE1A1D6F5200898466 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */;
@@ -504,13 +524,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 80855F4F19BE258C006601C7;
 			remoteInfo = BridgeSDK;
-		};
-		8063030E1E4AA031001B0C3D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 80B2C4A01E3AAC25001F9FEA;
-			remoteInfo = "OpenSSL (iOS Static Library)";
 		};
 		807AE2A01B60330C002588BB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -567,27 +580,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = D899CF96162C5EC100112F49;
 			remoteInfo = ZipZapTests;
-		};
-		80B2C4651E3AA004001F9FEA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 60674AE31B30A93900A1917D;
-			remoteInfo = openssl;
-		};
-		80B2C4671E3AA004001F9FEA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 60674AEE1B30A93900A1917D;
-			remoteInfo = opensslTests;
-		};
-		80B2C5961E3AB5B3001F9FEA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 80B2C4A11E3AAC25001F9FEA;
-			remoteInfo = "OpenSSL (iOS Static Library)";
 		};
 		80DB6BA61BACB27C0062D1EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -874,7 +866,6 @@
 		80B2C4431E3A5CED001F9FEA /* SBBDataArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBBDataArchive.h; sourceTree = "<group>"; };
 		80B2C4441E3A5CED001F9FEA /* SBBDataArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBBDataArchive.m; sourceTree = "<group>"; };
 		80B2C4471E3A9FED001F9FEA /* ZipZap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipZap.xcodeproj; path = Submodules/ZipZap/ZipZap.xcodeproj; sourceTree = "<group>"; };
-		80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = Submodules/CMSSupport/openssl/openssl.xcodeproj; sourceTree = "<group>"; };
 		80B2C4901E3AA80D001F9FEA /* ZipZap+Namespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ZipZap+Namespace.h"; sourceTree = SOURCE_ROOT; };
 		80B2C6031E3AD493001F9FEA /* ZipZap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipZap.h; sourceTree = "<group>"; };
 		80B2C6041E3AD493001F9FEA /* ZZArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZArchive.h; sourceTree = "<group>"; };
@@ -1068,6 +1059,9 @@
 				606FDDF11A1D6F5200898466 /* RNCryptor.framework */,
 				606FDDF31A1D6F5200898466 /* RNCryptorTests.xctest */,
 				606FDDF51A1D6F5200898466 /* rncrypt */,
+				5A0102331F54C8D500D777E4 /* RNCryptor.framework */,
+				5A0102351F54C8D500D777E4 /* RNCryptor.framework */,
+				5A0102371F54C8D500D777E4 /* RNCryptor.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1300,7 +1294,6 @@
 				80E09AD619F8525C00EB5F0B /* hdocExcludes.txt */,
 				80C3D07519DCA03C00DEA044 /* TemplateIcon2x.png */,
 				606FDE0B1A1D70ED00898466 /* generate_namespace_header.sh */,
-				80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */,
 				80B2C4471E3A9FED001F9FEA /* ZipZap.xcodeproj */,
 				606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */,
 				80855F5219BE258C006601C7 /* BridgeSDK */,
@@ -1443,16 +1436,6 @@
 				80B2C45A1E3A9FED001F9FEA /* ZipZap.framework */,
 				80B2C45C1E3A9FED001F9FEA /* libZipZap.a */,
 				80B2C45E1E3A9FED001F9FEA /* ZipZapTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		80B2C4601E3AA004001F9FEA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				80B2C4661E3AA004001F9FEA /* openssl.framework */,
-				80B2C4681E3AA004001F9FEA /* opensslTests.xctest */,
-				80B2C5971E3AB5B3001F9FEA /* libOpenSSL.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2013,10 +1996,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 80B2C4601E3AA004001F9FEA /* Products */;
-					ProjectRef = 80B2C45F1E3AA004001F9FEA /* openssl.xcodeproj */;
-				},
-				{
 					ProductGroup = 606FDDE81A1D6F5200898466 /* Products */;
 					ProjectRef = 606FDDE71A1D6F5200898466 /* RNCryptor.xcodeproj */;
 				},
@@ -2044,6 +2023,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		5A0102331F54C8D500D777E4 /* RNCryptor.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RNCryptor.framework;
+			remoteRef = 5A0102321F54C8D500D777E4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5A0102351F54C8D500D777E4 /* RNCryptor.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RNCryptor.framework;
+			remoteRef = 5A0102341F54C8D500D777E4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5A0102371F54C8D500D777E4 /* RNCryptor.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RNCryptor.framework;
+			remoteRef = 5A0102361F54C8D500D777E4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		606FDDEF1A1D6F5200898466 /* libRNCryptor.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2119,27 +2119,6 @@
 			fileType = wrapper.cfbundle;
 			path = ZipZapTests.xctest;
 			remoteRef = 80B2C45D1E3A9FED001F9FEA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		80B2C4661E3AA004001F9FEA /* openssl.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = openssl.framework;
-			remoteRef = 80B2C4651E3AA004001F9FEA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		80B2C4681E3AA004001F9FEA /* opensslTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = opensslTests.xctest;
-			remoteRef = 80B2C4671E3AA004001F9FEA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		80B2C5971E3AB5B3001F9FEA /* libOpenSSL.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libOpenSSL.a;
-			remoteRef = 80B2C5961E3AB5B3001F9FEA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -2524,11 +2503,6 @@
 			isa = PBXTargetDependency;
 			target = 80855F4F19BE258C006601C7 /* BridgeSDK */;
 			targetProxy = 8017AF6919D9E67C001AF9BA /* PBXContainerItemProxy */;
-		};
-		8063030F1E4AA031001B0C3D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "OpenSSL (iOS Static Library)";
-			targetProxy = 8063030E1E4AA031001B0C3D /* PBXContainerItemProxy */;
 		};
 		807AE2A11B60330C002588BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
