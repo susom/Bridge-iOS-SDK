@@ -646,6 +646,12 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
           @"Content-Type": uploadRequest.contentType,
           @"Content-MD5": uploadRequest.contentMd5
           };
+      
+        if (![[NSFileManager defaultManager] isReadableFileAtPath:uploadFileURL]) {
+          NSLog(@"File is not readable at path: %@", uploadFileURL);
+          return;
+        }
+      
         NSURL *fileUrl = [NSURL fileURLWithPath:uploadFileURL];
         [self.networkManager uploadFile:fileUrl httpHeaders:uploadHeaders toUrl:uploadSession.url taskDescription:uploadFileURL completion:^(NSURLSessionTask *task, NSHTTPURLResponse *response, NSError *error) {
 #if DEBUG
@@ -952,6 +958,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         // more than a day old are orphaned (note that under some unusual circumstances this may lead
         // to duplication of uploads).
         static const NSTimeInterval oneDay = 24. * 60. * 60.;
+
         NSArray *uploadFiles = [defaults dictionaryForKey:kUploadFilesKey].allKeys;
         NSDictionary *uploadRequests = [defaults dictionaryForKey:kUploadRequestsKey];
         NSDictionary *uploadSessions = [defaults dictionaryForKey:kUploadSessionsKey];
