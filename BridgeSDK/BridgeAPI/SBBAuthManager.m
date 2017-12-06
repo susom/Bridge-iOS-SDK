@@ -566,6 +566,7 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
         // we need to do this *after* storing the reauthToken to the keychain.
         id sessionInfo = [self.objectManager objectFromBridgeJSON:responseObject];
         [self postNewSessionInfo:sessionInfo];
+        [SBBComponent(SBBUploadManager) retryUploads];
     }
     
     if (completion) {
