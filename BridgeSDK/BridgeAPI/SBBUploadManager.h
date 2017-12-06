@@ -107,6 +107,7 @@ typedef void (^SBBUploadManagerCompletionBlock)(NSError *error);
  @see uploadFileToBridge:contentType:completion:
  */
 - (void)uploadFileToBridge:(NSURL *)fileUrl completion:(SBBUploadManagerCompletionBlock)completion;
+- (void) retryUploads;
 
 @end
 
