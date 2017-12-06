@@ -485,6 +485,7 @@ void dispatchSyncToKeychainQueue(dispatch_block_t dispatchBlock)
             // rather than just passing it to the delegate in the above call in place of the sessionToken. emm2017-06-01
             id sessionInfo = [self.objectManager objectFromBridgeJSON:responseObject];
             [self notifyDelegateOfNewSessionInfo:sessionInfo];
+            [SBBComponent(SBBUploadManager) retryUploads];
         }
         
         if (completion) {
