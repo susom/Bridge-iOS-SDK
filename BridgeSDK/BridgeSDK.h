@@ -46,6 +46,7 @@ extern const unsigned char BridgeSDKVersionString[];
   
 #import <BridgeSDK/SBBAuthManager.h>
 #import <BridgeSDK/SBBBridgeNetworkManager.h>
+#import <BridgeSDK/SBBMhealthNetworkManager.h>
 #import <BridgeSDK/SBBComponent.h>
 #import <BridgeSDK/SBBComponentManager.h>
 #import <BridgeSDK/SBBConsentManager.h>
@@ -83,7 +84,7 @@ static SBBEnvironment gDefaultEnvironment = kDefaultEnvironment;
  *  @param environment Which server environment to run against.
  */
 + (void)setupWithStudy:(NSString *)study environment:(SBBEnvironment)environment;
-
++ (void)setupMhealthWithStudy:(NSString *)study environment:(SBBEnvironment)environment;
 
 /*!
  * For backward compatibility only. Use setupWithStudy:environment: instead (which this method calls).

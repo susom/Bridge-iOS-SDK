@@ -29,10 +29,15 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <BridgeSDK/BridgeSDK.h>
 #import "SBBNetworkManager.h"
 
 extern NSString * kStanfordBackgroundSessionIdentifier;
 
-@interface SBBMhealthNetworkManager : SBBNetworkManager
+@protocol SBBMhealthNetworkManagerProtocol <SBBNetworkManagerProtocol>
+
+@end
+
+@interface SBBMhealthNetworkManager : SBBNetworkManager<SBBMhealthNetworkManagerProtocol>
 
 @end

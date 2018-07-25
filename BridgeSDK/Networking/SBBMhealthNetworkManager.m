@@ -29,6 +29,8 @@
  */
 
 #import "SBBMhealthNetworkManager.h"
+#import "SBBNetworkManagerInternal.h"
+#import "SBBAuthManagerInternal.h"
 
 NSString *kStanfordBackgroundSessionIdentifier = @"edu.stanford.backgroundsession";
 
@@ -46,6 +48,17 @@ NSString *kStanfordBackgroundSessionIdentifier = @"edu.stanford.backgroundsessio
 @end
 
 @implementation SBBMhealthNetworkManager
+
++ (NSString *)baseURLForEnvironment:(SBBEnvironment)environment appURLPrefix:(NSString *)prefix baseURLPath:(NSString *)baseURLPath
+{
+    NSString *baseURL = nil;
+    if (environment == SBBEnvironmentStaging) {
+        baseURL = @"https://device-qa.stanford.edu/mhc-KnRJe654r9xkA5tX/";
+    } else {
+        baseURL = @"https://device-qa.stanford.edu/mhc-KnRJe654r9xkA5tX/";
+    }
+    return baseURL;
+}
 
 - (NSURLSession *)backgroundSession
 {

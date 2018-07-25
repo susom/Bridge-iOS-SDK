@@ -54,6 +54,15 @@
     [SBBComponent(SBBBridgeNetworkManager) restoreBackgroundSession:kBackgroundSessionIdentifier completionHandler:nil];
 }
 
++ (void)setupMhealthWithStudy:(NSString *)study environment:(SBBEnvironment)environment
+{
+    gSBBAppStudy = study;
+    gSBBDefaultEnvironment = environment;
+    
+    // make sure the Mhealth network manager is set up as the delegate for the background session
+    [SBBComponent(SBBMhealthNetworkManager) restoreBackgroundSession:kBackgroundSessionIdentifier completionHandler:nil];
+}
+
 + (void)setupWithAppPrefix:(NSString *)appPrefix environment:(SBBEnvironment)environment
 {
     [self setupWithStudy:appPrefix environment:environment];
