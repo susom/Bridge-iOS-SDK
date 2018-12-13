@@ -250,13 +250,14 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
     __block NSError *error;
     NSFileManager *fileMan = [NSFileManager defaultManager];
     NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-    NSError *fileCoordinatorError = nil;
+    __block NSError *fileCoordinatorError = nil;
     [fileCoordinator coordinateReadingItemAtURL:fileURL options:0 writingItemAtURL:tempFileURL options:0 error:&fileCoordinatorError byAccessor:^(NSURL * _Nonnull newReadingURL, NSURL * _Nonnull newWritingURL) {
-        if (newReadingURL == nil || newWritingURL == nil) {
-            NSLog(@"%@", [NSString stringWithFormat:@"Error copying file %@ to %@", [[newReadingURL path] sandboxRelativePath], [[newWritingURL path] sandboxRelativePath]]);
-            return;
+        if (newReadingURL && newWritingURL && !fileCoordinatorError) {
+            [fileMan copyItemAtURL:newReadingURL toURL:newWritingURL error:&error];
+        } else if (!fileCoordinatorError) {
+            NSString *desc = [NSString stringWithFormat:@"Error copying file %@ to %@", [[newReadingURL path] sandboxRelativePath], [[newWritingURL path] sandboxRelativePath]];
+            fileCoordinatorError = [NSError errorWithDomain:SBB_ERROR_DOMAIN code:SBBErrorCodeTempFileReadError userInfo:@{NSLocalizedDescriptionKey: desc}];
         }
-        [fileMan copyItemAtURL:newReadingURL toURL:newWritingURL error:&error];
     }];
     
     NSString *errorMessage;
