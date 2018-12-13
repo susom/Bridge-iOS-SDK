@@ -891,6 +891,9 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
 
 - (NSArray<NSURL *> *)filesUnderDirectory:(NSURL *)baseDir
 {
+    if (baseDir == nil) {
+        return @[];
+    }
     NSFileManager *fileMan = [NSFileManager defaultManager];
     NSDirectoryEnumerator *directoryEnumerator =
     [fileMan enumeratorAtURL:baseDir
