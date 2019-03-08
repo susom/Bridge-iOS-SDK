@@ -563,6 +563,7 @@
     </entity>
     <entity name="SurveyQuestionOption" parentEntity="BridgeObject" syncable="YES">
         <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ignoreOthers" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="label" attributeType="String" defaultValueString="-" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Transformable" syncable="YES">
             <userInfo>
@@ -751,7 +752,7 @@
         <element name="SurveyElement" positionX="0" positionY="0" width="128" height="165"/>
         <element name="SurveyInfoScreen" positionX="0" positionY="0" width="128" height="60"/>
         <element name="SurveyQuestion" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="SurveyQuestionOption" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="SurveyQuestionOption" positionX="0" positionY="0" width="128" height="135"/>
         <element name="SurveyReference" positionX="0" positionY="0" width="128" height="180"/>
         <element name="SurveyRule" positionX="0" positionY="0" width="128" height="210"/>
         <element name="TaskReference" positionX="0" positionY="0" width="128" height="120"/>
