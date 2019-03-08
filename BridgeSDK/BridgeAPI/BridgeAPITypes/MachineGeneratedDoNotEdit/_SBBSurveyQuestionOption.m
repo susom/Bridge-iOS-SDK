@@ -53,6 +53,8 @@
 
 @property (nullable, nonatomic, retain) NSManagedObject *multiValueConstraints;
 
+@property (nullable, nonatomic, retain) NSNumber* ignoreOthers;
+
 @end
 
 @implementation _SBBSurveyQuestionOption
@@ -69,12 +71,24 @@
 
 #pragma mark Scalar values
 
+- (BOOL)ignoreOthersValue
+{
+    return [self.ignoreOthers boolValue];
+}
+
+- (void)setIgnoreOthersValue:(BOOL)value_
+{
+    self.ignoreOthers = [NSNumber numberWithBool:value_];
+}
+
 #pragma mark Dictionary representation
 
 - (void)updateWithDictionaryRepresentation:(NSDictionary *)dictionary objectManager:(id<SBBObjectManagerProtocol>)objectManager
 {
     [super updateWithDictionaryRepresentation:dictionary objectManager:objectManager];
 
+    self.ignoreOthers = [dictionary objectForKey:@"ignoreOthers"];
+    
     self.detail = [dictionary objectForKey:@"detail"];
 
     self.label = [dictionary objectForKey:@"label"];
@@ -94,6 +108,8 @@
 - (NSDictionary *)dictionaryRepresentationFromObjectManager:(id<SBBObjectManagerProtocol>)objectManager
 {
     NSMutableDictionary *dict = [[super dictionaryRepresentationFromObjectManager:objectManager] mutableCopy];
+
+    [dict setObjectIfNotNil:self.ignoreOthers forKey:@"ignoreOthers"];
 
     [dict setObjectIfNotNil:self.detail forKey:@"detail"];
 
@@ -127,6 +143,8 @@
 {
 
     if (self = [super initWithManagedObject:managedObject objectManager:objectManager cacheManager:cacheManager]) {
+
+        self.ignoreOthers = managedObject.ignoreOthers;
 
         self.detail = managedObject.detail;
 
@@ -174,6 +192,8 @@
     [super updateManagedObject:managedObject withObjectManager:objectManager cacheManager:cacheManager];
     NSManagedObjectContext *cacheContext = managedObject.managedObjectContext;
 
+    managedObject.ignoreOthers = ((id)self.ignoreOthers == [NSNull null]) ? nil : self.ignoreOthers;
+    
     managedObject.detail = ((id)self.detail == [NSNull null]) ? nil : self.detail;
 
     if (self.label) managedObject.label = self.label;
