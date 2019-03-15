@@ -259,7 +259,7 @@ static NSMutableDictionary *gCoreDataCacheIOContextsByPersistentStoreName;
         NSArray *paths = [syntheticKeyComponentPaths componentsSeparatedByString:@","];
         for (NSString *path in paths) {
             NSString *value = [json valueForKeyPath:path];
-            key = [key stringByAppendingString:value];
+            key = [key stringByAppendingString:value ? : @""];
         }
     } else {
         key = [json valueForKeyPath:keyPath];
