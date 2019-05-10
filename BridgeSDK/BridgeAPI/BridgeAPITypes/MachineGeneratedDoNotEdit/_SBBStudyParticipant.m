@@ -106,7 +106,7 @@
 
     NSString *password = cacheManager.encryptionKey;
     if (password) {
-        NSData *plaintext = [RNDecryptor decryptData:managedObject.ciphertext withPassword:password error:nil];
+        NSData *plaintext = [RNDecryptor decryptData:managedObject.ciphertext withPassword:password error:nil] ?: [NSData data];
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:plaintext options:0 error:NULL];
         self = [self initWithDictionaryRepresentation:jsonDict objectManager:objectManager];
     } else {
