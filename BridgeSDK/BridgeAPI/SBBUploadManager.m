@@ -98,15 +98,15 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         shared.networkManager.backgroundTransferDelegate = shared;
         [shared migrateKeysIfNeeded];
         
-//        // check if any uploads that got 503 status codes from S3 or Bridge errors are due for a retry
-//        // whenever the app comes to the foreground
-//        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-//            [shared checkAndRetryOrphanedUploads];
-//            [shared retryUploadsAfterDelay];
-//        }];
-//
-//        // also check right away
-//        [shared retryUploadsAfterDelay];
+        // check if any uploads that got 503 status codes from S3 or Bridge errors are due for a retry
+        // whenever the app comes to the foreground
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            [shared checkAndRetryOrphanedUploads];
+            [shared retryUploadsAfterDelay];
+        }];
+        
+        // also check right away
+        [shared retryUploadsAfterDelay];
     });
     
     return shared;
