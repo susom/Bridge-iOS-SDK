@@ -65,8 +65,8 @@ SBBAppConfig *gSBBAppConfig = nil;
     // make sure the Bridge network manager is set up as the delegate for the background session
     [SBBComponent(SBBBridgeNetworkManager) restoreBackgroundSession:kBackgroundSessionIdentifier completionHandler:nil];
     
-    // (re-)load the AppConfig for the specified study for this client version/platform/etc.
-    [self loadAppConfig];
+//    // (re-)load the AppConfig for the specified study for this client version/platform/etc.
+//    [self loadAppConfig];
     
     // post the user session updated notification so subscribers get it without having to wait for the next sign-in/reauth
     id authMan = SBBComponent(SBBAuthManager);
