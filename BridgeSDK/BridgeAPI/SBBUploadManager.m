@@ -705,21 +705,21 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         return nil;
     }
     
-    // If we already "know" about this upload, don't add it again; if it's hung up somehow, the orphaned file checking will catch it.
-    // If we don't have a completion handler for it, though, set it up with the given one before returning.
-    // Compare just the sandbox-relative parts, as the app sandbox path may have changed. But completion handlers, being in-memory-only,
-    // are indexed by the full path.
-    NSArray *uploadTempFiles = [[BridgeSDK sharedUserDefaults] dictionaryForKey:kUploadFilesKey].allKeys;
-    NSString *sandboxRelativePath = [fileUrl.path sandboxRelativePath];
-    for (NSString *uploadTempFile in uploadTempFiles) {
-        NSString *uploadFile = [self fileForTempFile:uploadTempFile];
-        if ([uploadFile isEqualToString:sandboxRelativePath]) {
-            [((SBBNetworkManager *)self.networkManager) performBlockOnBackgroundDelegateQueue:^{
-                [self setCompletionBlock:completion forFile:[uploadTempFile fullyQualifiedPath]];
-            }];
-            return nil;
-        }
-    }
+//    // If we already "know" about this upload, don't add it again; if it's hung up somehow, the orphaned file checking will catch it.
+//    // If we don't have a completion handler for it, though, set it up with the given one before returning.
+//    // Compare just the sandbox-relative parts, as the app sandbox path may have changed. But completion handlers, being in-memory-only,
+//    // are indexed by the full path.
+//    NSArray *uploadTempFiles = [[BridgeSDK sharedUserDefaults] dictionaryForKey:kUploadFilesKey].allKeys;
+//    NSString *sandboxRelativePath = [fileUrl.path sandboxRelativePath];
+//    for (NSString *uploadTempFile in uploadTempFiles) {
+//        NSString *uploadFile = [self fileForTempFile:uploadTempFile];
+//        if ([uploadFile isEqualToString:sandboxRelativePath]) {
+//            [((SBBNetworkManager *)self.networkManager) performBlockOnBackgroundDelegateQueue:^{
+//                [self setCompletionBlock:completion forFile:[uploadTempFile fullyQualifiedPath]];
+//            }];
+//            return nil;
+//        }
+//    }
     
     // make a temp copy with a unique name
     NSURL *tempFileURL = [self tempFileForFileURL:fileUrl];
