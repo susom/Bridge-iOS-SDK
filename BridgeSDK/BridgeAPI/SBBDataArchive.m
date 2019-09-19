@@ -284,9 +284,16 @@ static NSString * kV1LegacyFormat                   = @"v1_legacy";
 
 - (void)encryptAndUploadArchive
 {
+    [self encryptAndUploadArchiveWithCompletion:nil];
+}
+
+- (void)encryptAndUploadArchiveWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion
+{
     // Check that the archive has been closed.
     if (!self.isCompleted) {
-        if (![self completeArchive:nil]) {
+        NSError *error;
+        if (![self completeArchive:&error]) {
+            if (completion) completion(error);
             return;
         }
     }
@@ -309,8 +316,10 @@ static NSString * kV1LegacyFormat                   = @"v1_legacy";
                 } else {
                     SBBLog(@"SBBDataArchive error returned from SBBUploadManager:\n%@\n%@", error.localizedDescription, error.localizedFailureReason);
                 }
-
+                if (completion) completion(error);
             }];
+        } else {
+            if (completion) completion(error);
         }
     }];
 }
