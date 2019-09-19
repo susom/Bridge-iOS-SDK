@@ -147,6 +147,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)encryptAndUploadArchive;
 
 /**
+Completes the archive, encrypts it, and uploads it to Bridge, then removes the archive and calls completion block.
+*/
+- (void)encryptAndUploadArchiveWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion;
+
+/**
  Completes each archive, encrypts it, and uploads it to Bridge, then removes the archive.
  
  @param     archives                The data archives to be encrypted and sent
