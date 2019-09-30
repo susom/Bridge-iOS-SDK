@@ -492,7 +492,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
                 SBBUploadManagerCompletionBlock completion = [self completionBlockForFile:filePath];
                 
                 if (completion && uploadRequestJSON.allKeys.count) {
-                    [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON];
+                    [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON uploadId:nil];
                 } else {
                     [self retryOrphanedUploadFromScratch:filePath];
                 }
@@ -600,7 +600,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
 }
 
 // --- And here's the completion handler for getting the SBBUploadSession in the first place:
-- (void)downloadedBridgeUploadSessionWithDownloadTask:(NSURLSessionDownloadTask *)downloadTask fileURL:(NSURL *)file
+- (NSString *)downloadedBridgeUploadSessionWithDownloadTask:(NSURLSessionDownloadTask *)downloadTask fileURL:(NSURL *)file
 {
     NSError *error;
     NSString *uploadFileURL = downloadTask.taskDescription;
@@ -608,21 +608,21 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         // already got one--this means we retried requesting the upload session for the file because the initial
         // Bridge request took too long to respond, but has now responded; but we only need one of these to
         // go on to attempt the upload to S3, so we'll just ignore this one
-        return;
+        return nil;
     }
     
     NSData *jsonData = [NSData dataWithContentsOfURL:file options:0 error:&error];
     if (error) {
         NSLog(@"Error reading downloaded UploadSession file into an NSData object:\n%@", error);
         [self completeUploadOfFile:uploadFileURL withError:error];
-        return;
+        return nil;
     }
     
     id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
     if (error) {
         [self completeUploadOfFile:uploadFileURL withError:error];
         NSLog(@"Error deserializing downloaded UploadSession data into objects:\n%@", error);
-        return;
+        return nil;
     }
     
     SBBUploadSession *uploadSession = [self.cleanObjectManager objectFromBridgeJSON:jsonObject];
@@ -632,7 +632,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         NSString *desc = [NSString stringWithFormat:@"Error retrieving upload request headers for temp file URL:\n%@", uploadFileURL];
         error = [NSError errorWithDomain:SBB_ERROR_DOMAIN code:SBBErrorCodeTempFileError userInfo:@{NSLocalizedDescriptionKey: desc}];
         [self completeUploadOfFile:uploadFileURL withError:error];
-        return;
+        return uploadSession.id;
     }
     
     if ([uploadSession isKindOfClass:[SBBUploadSession class]]) {
@@ -649,7 +649,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
       
         if (![[NSFileManager defaultManager] isReadableFileAtPath:uploadFileURL]) {
           NSLog(@"File is not readable at path: %@", uploadFileURL);
-          return;
+          return uploadSession.id;
         }
       
         NSURL *fileUrl = [NSURL fileURLWithPath:uploadFileURL];
@@ -667,6 +667,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
         // the response from Bridge was an error message; we already handled this in the task completion
         // block for fetching the UploadSession
     }
+    return uploadSession.id;
 }
 
 - (void)uploadFileToBridge:(NSURL *)fileUrl completion:(SBBUploadManagerCompletionBlock)completion
@@ -683,11 +684,16 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
 
 - (void)uploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion
 {
-    [self tempFileForUploadFileToBridge:fileUrl contentType:contentType completion:completion];
+    [self tempFileForUploadFileToBridge:fileUrl contentType:contentType completion:completion uploadId:nil];
+}
+
+- (void)uploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion uploadId:(void (^)(NSString *))handler
+{
+    [self tempFileForUploadFileToBridge:fileUrl contentType:contentType completion:completion uploadId:handler];
 }
 
 // internal method returns temp file URL for unit tests
-- (NSURL *)tempFileForUploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion
+- (NSURL *)tempFileForUploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion uploadId:(void (^)(NSString *))handler
 {
     if (![fileUrl isFileURL] || ![[NSFileManager defaultManager] isReadableFileAtPath:[fileUrl path]]) {
         NSLog(@"Attempting to upload an URL that's not a readable file URL:\n%@", fileUrl);
@@ -760,7 +766,9 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
     NSDictionary *uploadRequestJSON = [self.cleanObjectManager bridgeJSONFromObject:uploadRequest];
     
     [((SBBNetworkManager *)self.networkManager) performBlockOnBackgroundDelegateQueue:^{
-        [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON];
+        [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON uploadId:^(NSString *uploadId) {
+            if (handler) handler(uploadId);
+        }];
     }];
     
     return tempFileURL;
@@ -769,8 +777,9 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
 // This presumes uploadFileToBridge:contentType:completion: was called to set things up for this file,
 // so can be used for both the initial upload attempt and any retries due to 403 (presigned url timed out).
 // It also presumes it's being called from within the background NSURLSession's delegate queue.
-- (void)kickOffUploadForFile:(NSString *)filePath uploadRequestJSON:(NSDictionary *)uploadRequestJSON
+- (void)kickOffUploadForFile:(NSString *)filePath uploadRequestJSON:(NSDictionary *)uploadRequestJSON uploadId:(void (^)(NSString *))handler
 {
+    __block NSString *uploadId = nil;
     // this starts the process by downloading the Bridge UploadSession.
     // first, make sure we get rid of any existing UploadSession for this file, in case this is a retry.
     [self setUploadSessionJSON:nil forFile:filePath];
@@ -779,7 +788,8 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
     [self.authManager addAuthHeaderToHeaders:headers];
     
     __block NSURLSessionDownloadTask *downloadTask = [self.networkManager downloadFileFromURLString:kSBBUploadAPI method:@"POST" httpHeaders:headers parameters:uploadRequestJSON taskDescription:filePath downloadCompletion:^(NSURL *file) {
-        [self downloadedBridgeUploadSessionWithDownloadTask:downloadTask fileURL:file];
+        uploadId = [self downloadedBridgeUploadSessionWithDownloadTask:downloadTask fileURL:file];
+        if (handler) handler(uploadId);
     } taskCompletion:^(NSURLSessionTask *task, NSHTTPURLResponse *response, NSError *error) {
         // We don't care about this unless there was a network or HTTP error.
         // Otherwise we'll have gotten and handled the downloaded file url in the downloadCompletion block, above.
@@ -1000,7 +1010,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
                         SBBUploadManagerCompletionBlock completion = [self completionBlockForFile:filePath];
                         if (completion && uploadRequestJSON) {
                             // just re-try the actual upload
-                            [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON];
+                            [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON uploadId:nil];
                         } else {
                             [self retryOrphanedUploadFromScratch:filePath];
                         }
@@ -1036,7 +1046,7 @@ NSTimeInterval kSBBDelayForRetries = 5. * 60.; // at least 5 minutes, actually w
                 NSDictionary *uploadRequestJSON = [self uploadRequestJSONForFile:filePath];
                 SBBUploadManagerCompletionBlock completion = [self completionBlockForFile:filePath];
                 if (completion && uploadRequestJSON) {
-                    [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON];
+                    [self kickOffUploadForFile:filePath uploadRequestJSON:uploadRequestJSON uploadId:nil];
                 } else {
                     // earlier version of SDK cleaned up saved UploadRequests prematurely, so just start over
                     // from scratch if we don't have one, or if the completion block is lost due to app relaunch

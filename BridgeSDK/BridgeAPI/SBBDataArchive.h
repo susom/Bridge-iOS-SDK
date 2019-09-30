@@ -146,6 +146,8 @@ Completes the archive, encrypts it, and uploads it to Bridge, then removes the a
 */
 - (void)encryptAndUploadArchiveWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 
+- (void)encryptAndUploadArchiveWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion uploadId:(void (^)(NSString *))handler;
+
 /**
  Completes each archive, encrypts it, and uploads it to Bridge, then removes the archive.
  

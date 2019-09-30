@@ -100,6 +100,7 @@ typedef void (^SBBUploadManagerCompletionBlock)(NSError *error);
  */
 - (void)uploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion;
 
+- (void)uploadFileToBridge:(NSURL *)fileUrl contentType:(NSString *)contentType completion:(SBBUploadManagerCompletionBlock)completion uploadId:(void (^)(NSString *))handler;
 /*!
  This is a convenience method that determines the appropriate content-type based on the file extension and calls through to
  uploadFileToBridge:contentType:completion:.
