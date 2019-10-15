@@ -65,11 +65,13 @@
 {
     // normalize the path--i.e. /private/var-->/var (see docs for URLByResolvingSymlinksInPath, which removes /private as a special case
     // even though /var is actually a symlink to /private/var in this case)
-    NSString *normalizedSelf = [[NSURL fileURLWithPath:self] URLByResolvingSymlinksInPath].path;
-    NSRange range = [[self sandboxRegex] rangeOfFirstMatchInString:normalizedSelf options:0 range:NSMakeRange(0, normalizedSelf.length)];
-    NSString *sandboxRelativePath = [normalizedSelf substringFromIndex:range.length]; // if it doesn't match the sandbox regex, this will give back normalizedSelf
-    
-    return sandboxRelativePath;
+    @autoreleasepool {
+        NSString *normalizedSelf = [[NSURL fileURLWithPath:self] URLByResolvingSymlinksInPath].path;
+        NSRange range = [[self sandboxRegex] rangeOfFirstMatchInString:normalizedSelf options:0 range:NSMakeRange(0, normalizedSelf.length)];
+        NSString *sandboxRelativePath = [normalizedSelf substringFromIndex:range.length]; // if it doesn't match the sandbox regex, this will give back normalizedSelf
+        
+        return sandboxRelativePath;
+    }
 }
 
 - (NSString *)fullyQualifiedPath
