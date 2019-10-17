@@ -55,5 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) NSString* patternPlaceholder;
 
+@property (nonatomic, strong) NSNumber* autocorrection;
+
+@property (nonatomic, assign) BOOL autocorrectionValue;
+
 @end
 NS_ASSUME_NONNULL_END

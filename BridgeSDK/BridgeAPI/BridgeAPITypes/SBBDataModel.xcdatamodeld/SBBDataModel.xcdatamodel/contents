@@ -445,6 +445,7 @@
         <attribute name="study" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="StringConstraints" parentEntity="SurveyConstraints" syncable="YES">
+        <attribute name="autocorrection" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="maxLength" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="minLength" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="pattern" optional="YES" attributeType="String" syncable="YES"/>
@@ -743,7 +744,7 @@
         <element name="ScheduledActivity" positionX="0" positionY="0" width="128" height="180"/>
         <element name="SchemaReference" positionX="9" positionY="153" width="128" height="150"/>
         <element name="SignUp" positionX="27" positionY="162" width="128" height="90"/>
-        <element name="StringConstraints" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="StringConstraints" positionX="0" positionY="0" width="128" height="133"/>
         <element name="StudyParticipant" positionX="18" positionY="153" width="128" height="90"/>
         <element name="SubscriptionStatus" positionX="18" positionY="153" width="128" height="90"/>
         <element name="SubscriptionStatusList" positionX="27" positionY="162" width="128" height="45"/>

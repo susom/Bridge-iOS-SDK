@@ -51,6 +51,8 @@
 
 @property (nullable, nonatomic, retain) NSString* patternPlaceholder;
 
+@property (nullable, nonatomic, retain) NSNumber* autocorrection;
+
 @end
 
 @implementation _SBBStringConstraints
@@ -87,6 +89,16 @@
 	self.minLength = [NSNumber numberWithLongLong:value_];
 }
 
+- (BOOL)autocorrectionValue
+{
+    return [self.autocorrection boolValue];
+}
+
+- (void)setAutocorrectionValue:(BOOL)value_
+{
+    self.autocorrection = [NSNumber numberWithBool:value_];
+}
+
 #pragma mark Dictionary representation
 
 - (void)updateWithDictionaryRepresentation:(NSDictionary *)dictionary objectManager:(id<SBBObjectManagerProtocol>)objectManager
@@ -96,6 +108,8 @@
     self.maxLength = [dictionary objectForKey:@"maxLength"];
 
     self.minLength = [dictionary objectForKey:@"minLength"];
+    
+    self.autocorrection = [dictionary objectForKey:@"autocorrection"];
 
     self.pattern = [dictionary objectForKey:@"pattern"];
 
@@ -112,6 +126,8 @@
     [dict setObjectIfNotNil:self.maxLength forKey:@"maxLength"];
 
     [dict setObjectIfNotNil:self.minLength forKey:@"minLength"];
+    
+    [dict setObjectIfNotNil:self.autocorrection forKey:@"autocorrection"];
 
     [dict setObjectIfNotNil:self.pattern forKey:@"pattern"];
 
@@ -145,6 +161,8 @@
         self.maxLength = managedObject.maxLength;
 
         self.minLength = managedObject.minLength;
+        
+        self.autocorrection = managedObject.autocorrection;
 
         self.pattern = managedObject.pattern;
 
@@ -187,6 +205,8 @@
     managedObject.maxLength = ((id)self.maxLength == [NSNull null]) ? nil : self.maxLength;
 
     managedObject.minLength = ((id)self.minLength == [NSNull null]) ? nil : self.minLength;
+    
+    managedObject.autocorrection = ((id)self.autocorrection == [NSNull null]) ? nil : self.autocorrection;
 
     managedObject.pattern = ((id)self.pattern == [NSNull null]) ? nil : self.pattern;
 
