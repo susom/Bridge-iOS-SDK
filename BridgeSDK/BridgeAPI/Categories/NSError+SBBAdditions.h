@@ -44,6 +44,7 @@
 + (NSError *)SBBNotAuthorizedError;
 + (NSError *)SBBAccountDisabledError;
 + (NSError *)SBBUnsupportedAppVersionError;
++ (NSError *)SBBEncryptionExceptionError;
 + (NSError *)generateSBBNotAFileURLErrorForURL:(NSURL *)url;
 + (NSError *)generateSBBObjectNotExpectedClassErrorForObject:(id)object expectedClass:(Class)expectedClass;
 + (NSError *)generateSBBTempFileErrorForURL:(NSURL *)url;

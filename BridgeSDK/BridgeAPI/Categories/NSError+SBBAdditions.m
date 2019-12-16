@@ -185,6 +185,13 @@
     return [NSError errorWithDomain:SBB_ERROR_DOMAIN code:SBBErrorCodeUnsupportedAppVersion userInfo:userInfo];
 }
 
++ (NSError *)SBBEncryptionExceptionError
+{
+    return [NSError errorWithDomain:SBB_ERROR_DOMAIN code:SBBErrorCodeEncryptionException
+                           userInfo:@{NSLocalizedDescriptionKey: NSLocalizedStringWithDefaultValue(@"SBB_ERROR_ENCRYPTION_EXCEPTION", @"BridgeSDK", [NSBundle bundleForClass:[BridgeSDK class]], @"There was a problem encrypting data.",
+                                                                                                   @"Error Description: encrypting data exception")}];
+}
+
 + (NSError *)generateSBBNotAFileURLErrorForURL:(NSURL *)url
 {
   NSString *localizedFormat = NSLocalizedStringWithDefaultValue(@"SBB_ERROR_INVALID_FILE_URL", @"BridgeSDK", [NSBundle bundleForClass:[BridgeSDK class]], @"Not a valid file URL:\n%@", @"Error Description: not a valid url");

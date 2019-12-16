@@ -33,6 +33,7 @@
 
 #import "SBBEncryptor.h"
 #import "BridgeSDK+Internal.h"
+#import "NSError+SBBAdditions.h"
 @import UIKit;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
@@ -66,8 +67,13 @@ static NSString *kEncryptedFileBaseFolder = @"encryptor";
     NSData * unencryptedZipData = [NSData dataWithContentsOfFile:url.relativePath];
     NSString *pemPath = [[NSBundle mainBundle] pathForResource:SBBBridgeInfo.shared.certificateName ofType:@".pem"];
     if (pemPath) {
-        NSData * encryptedZipData = [self.class cmsEncrypt:unencryptedZipData identityPath:pemPath error:&encryptionError];
-        
+        NSData * encryptedZipData = nil;
+        @try {
+            encryptedZipData = [self.class cmsEncrypt:unencryptedZipData identityPath:pemPath error:&encryptionError];
+            
+        } @catch (NSException *exception) {
+            encryptionError = [NSError SBBEncryptionExceptionError];
+        }
         if (encryptedZipData) {
             NSString *encryptedPath = [[self workingDirectoryPath] stringByAppendingPathComponent:kEncryptedDataFilename];
             
