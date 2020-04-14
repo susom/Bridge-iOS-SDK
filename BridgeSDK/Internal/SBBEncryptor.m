@@ -69,8 +69,9 @@ static NSString *kEncryptedFileBaseFolder = @"encryptor";
     if (pemPath) {
         NSData * encryptedZipData = nil;
         @try {
-            encryptedZipData = [self.class cmsEncrypt:unencryptedZipData identityPath:pemPath error:&encryptionError];
-            
+            @synchronized (self.class) {
+                encryptedZipData = [self.class cmsEncrypt:unencryptedZipData identityPath:pemPath error:&encryptionError];
+            }
         } @catch (NSException *exception) {
             encryptionError = [NSError SBBEncryptionExceptionError];
         }
@@ -208,7 +209,9 @@ err:
 + (NSString *)encryptedDataPathRoot
 {
     static NSString *pathRoot = nil;
-    if (!pathRoot) {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
         NSString *appGroupIdentifier = SBBBridgeInfo.shared.appGroupIdentifier;
         if (appGroupIdentifier.length > 0) {
             NSURL *sharedContainer = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:appGroupIdentifier];
@@ -223,14 +226,15 @@ err:
         } else {
             pathRoot = NSTemporaryDirectory();
         }
-    }
+    });
+
     return pathRoot;
 }
 
 + (NSArray<NSString *> *)encryptedFilesAwaitingUploadResponse {
     NSString *tmpDir = self.encryptedDataPathRoot;
     NSFileManager *fileMan = [NSFileManager defaultManager];
-    
+
     NSArray<NSString *> *tmpContents = [fileMan subpathsAtPath:tmpDir];
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
         return [self isEncryptedString:(NSString *)evaluatedObject];
@@ -260,9 +264,9 @@ err:
 
 - (NSString *)workingDirectoryPath
 {
-    
+
     NSString *workingDirectoryPath = [[self.class encryptedDataPathRoot] stringByAppendingPathComponent:self.workingDirectoryName];
-    
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:workingDirectoryPath]) {
         NSError * fileError;
         BOOL created = [[NSFileManager defaultManager] createDirectoryAtPath:workingDirectoryPath withIntermediateDirectories:YES attributes:@{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication } error:&fileError];
